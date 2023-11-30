@@ -1,0 +1,15 @@
+ {
+    "contentsDeltaUri": "gs://<my-bucket-name>/contents/",
+    "config": {
+        "dimensions": 768,
+        "approximateNeighborsCount": 150,
+        "distanceMeasureType": "DOT_PRODUCT_DISTANCE",
+        "shardSize": "SHARD_SIZE_MEDIUM",
+        "algorithm_config": {
+            "tree_ah_config": {
+                "leaf_node_embedding_count": 5000,
+                "leaf_nodes_to_search_percent": 3
+            }
+        }
+    }
+}
