@@ -225,7 +225,7 @@ variable "functions_output_zip_path" {
 
 variable "funtions_source_dir" {
   type    = string
-  default = "../src/upload_data/"
+  default = "../src/upload_data"
 }
 
 variable "env_secrets" {

@@ -2,18 +2,18 @@ import os
 import logging
 import pandas as pd
 from google.cloud import aiplatform
-from upload_data.lib.typehint import HintDataFrame
-from upload_data.lib.process_new_pages import process_new_pages
-from upload_data.lib.get_chunks_ids import get_id_to_delete_from_df
-from upload_data.lib.firestore import init_firestore_db, delete_to_firestore
-from upload_data.lib.get_updates_pages import get_df_of_pages_to_add_and_delete
-from upload_data.lib.gcs import write_str_in_gcs, copy_blob, delete_list_of_gcs_files_in_directory
-from upload_data.lib.get_confluence_pages import (
+from lib.typehint import HintDataFrame
+from lib.process_new_pages import process_new_pages
+from lib.get_chunks_ids import get_id_to_delete_from_df
+from lib.firestore import init_firestore_db, delete_to_firestore
+from lib.get_updates_pages import get_df_of_pages_to_add_and_delete
+from lib.gcs import write_str_in_gcs, copy_blob, delete_list_of_gcs_files_in_directory
+from lib.get_confluence_pages import (
     get_confluence_active_pages_and_metadata,
     write_confluence_active_pages_in_gcs
 )
 
-from upload_data.config import (
+from config import (
     INDEX_ID,
     PROJECT_ID,
     REGION,
@@ -75,17 +75,18 @@ def main(data=None, context=None):
         destination_blob_name=os.path.join(GCS_ACTIVE_CONFLUENCE_PAGES_DIRECTORY, GCS_PREVIOUS_PAGES_LIST_FILENAME)
     )
 
-    # Update the vertex Index
-    gcs_embedding_uri = 'gs://' + BUCKET_NAME + '/' + GCS_EMBEDDING_DIRECTORY
-    rag_index = aiplatform.MatchingEngineIndex(
-        index_name=INDEX_ID,
-        project=PROJECT_ID,
-        location=REGION
-    )
-    rag_index.update_embeddings(
-        contents_delta_uri=gcs_embedding_uri,
-        is_complete_overwrite=True
-    )
+    if len(df_new) + len(df_deleted):
+        # Update the vertex Index
+        gcs_embedding_uri = 'gs://' + BUCKET_NAME + '/' + GCS_EMBEDDING_DIRECTORY
+        rag_index = aiplatform.MatchingEngineIndex(
+            index_name=INDEX_ID,
+            project=PROJECT_ID,
+            location=REGION
+        )
+        rag_index.update_embeddings(
+            contents_delta_uri=gcs_embedding_uri,
+            is_complete_overwrite=True
+        )
 
 
 if __name__ == '__main__':

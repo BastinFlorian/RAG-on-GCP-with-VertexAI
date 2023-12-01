@@ -1,4 +1,4 @@
-include .env
+include src/.env
 
 
 # Tests

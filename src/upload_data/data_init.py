@@ -1,17 +1,17 @@
 import os
 import logging
 from google.cloud import aiplatform
-from upload_data.lib.typehint import HintDataFrame
-from upload_data.lib.gcs import copy_blob, delete_all_gcs_files_in_directory
-from upload_data.lib.process_new_pages import process_new_pages
-from upload_data.lib.firestore import delete_collection, init_firestore_db
-from upload_data.lib.filters import get_metadata_from_active_pages
-from upload_data.lib.get_confluence_pages import (
+from lib.typehint import HintDataFrame
+from lib.gcs import copy_blob, delete_all_gcs_files_in_directory
+from lib.process_new_pages import process_new_pages
+from lib.firestore import delete_collection, init_firestore_db
+from lib.filters import get_metadata_from_active_pages
+from lib.get_confluence_pages import (
     get_confluence_active_pages_and_metadata,
     write_confluence_active_pages_in_gcs
 )
 
-from upload_data.config import (
+from config import (
     INDEX_ID,
     PROJECT_ID,
     REGION,

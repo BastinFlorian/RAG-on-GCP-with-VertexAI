@@ -1,3 +1,4 @@
+import os
 import uuid
 import time
 import logging
@@ -15,6 +16,7 @@ from lib.streaming import StreamHandler
 from lib.send_feedback import send_to_pubsub
 from lib.source_retriever import list_top_k_sources, get_top_k_urls
 
+from images import IMAGE_PATH
 from config import (
     PROJECT_ID,
     REGION,
@@ -32,8 +34,8 @@ aiplatform.init(
     location=REGION
 )
 
-octo_logo = add_logo(logo_path="./chatbot/images/logo.png", width=250, height=120)
-octo_avatar = add_logo(logo_path="./chatbot/images/avatar.png", width=50, height=50)
+octo_logo = add_logo(logo_path=os.path.join(IMAGE_PATH, "logo.png"), width=250, height=120)
+octo_avatar = add_logo(logo_path=os.path.join(IMAGE_PATH, "avatar.png"), width=50, height=50)
 st.set_page_config(page_title="Chatbot - Octo", layout="centered", page_icon=octo_avatar)
 
 
@@ -46,14 +48,14 @@ def _submit_feedback(user_response, *args):
         "👍": 1,
         "👎": 0
     }[thumbs]
-    feedback_time = dt.dt.now().strftime("%Y-%m-%d %H:%M:%S")
+    feedback_time = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     feedback = user_response['text']
     runtime = st.session_state.runtime[n_it]
     sources = st.session_state.sources[n_it]
     feedback = user_response['text'] or ""
     feedback_dict = {
         "id": str(USER_ID),
-        "dt": str(feedback_time),
+        "datetime": str(feedback_time),
         "rating": int(rating),
         "feedback": str(feedback),
         "question": str(question),
@@ -61,7 +63,7 @@ def _submit_feedback(user_response, *args):
         "runtime": float(runtime),
         "sources": str(sources)
     }
-
+    print(feedback_dict)
     send_to_pubsub(feedback_dict)
     st.toast(f"Feedback submitted: {user_response['score']}")
 
@@ -140,7 +142,7 @@ with st.sidebar:
 for n, message in enumerate(st.session_state.messages):
     if message["role"] == "assistant":
 
-        with st.chat_message(message["role"], avatar="./chatbot/images/avatar.png"):
+        with st.chat_message(message["role"], avatar=os.path.join(IMAGE_PATH, "avatar.png")):
             st.markdown(message["content"])
             feedback_key = f"feedback_{n // 2}"
 
@@ -171,7 +173,7 @@ if prompt := st.chat_input("How may I help you?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user", avatar="🧑‍💻").write(prompt)
 
-    with st.chat_message("assistant", avatar="./chatbot/images/avatar.png"):
+    with st.chat_message("assistant", avatar=os.path.join(IMAGE_PATH, "avatar.png")):
         with st.spinner(text='I am thinking...'):
             time_st = time.time()
 
@@ -188,8 +190,8 @@ if prompt := st.chat_input("How may I help you?"):
                 st.write(answer)
 
         time_end = time.time()
-        sources = get_top_k_urls(result)
-        sources_md = list_top_k_sources(result)
+        sources = get_top_k_urls(result["source_documents"])
+        sources_md = list_top_k_sources(result["source_documents"])
 
         # Save metadata
         st.session_state.runtime.append(float(round(time_end - time_st, 3)))

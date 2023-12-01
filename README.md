@@ -220,15 +220,14 @@ vim .env # add the required variables
 
 ####  3.3. <a name='Runtheapplocally'></a>Run the app locally
 ```bash
-cd src
 # To run the app in local:
-poetry run python -m streamlit run chatbot/app.py
+poetry run python -m streamlit run src/chatbot/app.py
 
 # At initialization, add new data:
-poetry run python -m upload_data.data_init
+poetry run python src/upload_data/data_init.py
 
 # To update the index with new/modified/deleted Confluence data
-poetry run python -m upload_data.data_update
+poetry run python src/upload_data/data_update.py
 ```
 
 ####  3.4. <a name='UnderstandtheChatbotlogicwiththenotebooks'></a>Understand the Chatbot logic with the notebooks
