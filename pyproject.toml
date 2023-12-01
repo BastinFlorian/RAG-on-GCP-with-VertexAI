@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "evaluation"
+version = "0.1.0"
+description = "How to evaluate a RAG pipeline"
+authors = ["Florian Bastin <florian.bastin@octo.com>"]
+license = "Apache License 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python ="^3.10,<3.12"
+langchain = "^0.0.330"
+jupyterlab = "^4.0.8"
+numpy = "1.25.2"
+pandas = "2.0.3"
+python-dotenv = "^1.0.0"
+atlassian-python-api = "^3.41.3"
+markdownify = "^0.11.6"
+tqdm = "^4.66.1"
+tensorflow-hub = "^0.15.0"
+tensorflow = {version = ">=2.13.0", markers = "sys_platform != 'darwin'"}
+google-cloud-aiplatform = "^1.36.4"
+google-api-core = "^2.13.0"
+firebase-admin = "^6.2.0"
+google-cloud-datastore = "^2.18.0"
+streamlit = "^1.28.1"
+pytest = "^7.4.3"
+lxml = "^4.9.3"
+streamlit-feedback = "^0.1.2"
+google-cloud-pubsub = "^2.18.4"
+fsspec = "^2023.10.0"
+gcsfs = "^2023.10.0"
+flake8 = "^6.1.0"
+pillow = "^10.1.0"
+vulture = "^2.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
